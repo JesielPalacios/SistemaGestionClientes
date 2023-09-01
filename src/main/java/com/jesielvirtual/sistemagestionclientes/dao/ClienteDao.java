@@ -7,6 +7,7 @@ package com.jesielvirtual.sistemagestionclientes.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +30,13 @@ public class ClienteDao {
         
         try {
             Class.forName(driver);
-            DriverManager.getConnection(conexionUrl, usuario, password);
+            conexion = DriverManager.getConnection(conexionUrl, usuario, password);
+            
+            // String sql = "INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `telefono`, `correo`) VALUES ('', 'Pepito', 'Perez', '1234567890', 'asdasdasd@gmail.com');";
+            // String sql = "INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `telefono`, `correo`) VALUES (NULL, 'Pepito', 'Perez', '1234567890', 'asdasdasd@gmail.com');";
+            String sql = "INSERT INTO `clientes` (`nombre`, `apellido`, `telefono`, `correo`) VALUES (, 'Pepito', 'Perez', '1234567890', 'asdasdasd@gmail.com');";
+            Statement statement = conexion.createStatement();
+            statement.execute(sql);
         // } catch (SQLException ex) {
         } catch (Exception ex) {
             Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
