@@ -5,6 +5,7 @@
 package com.jesielvirtual.sistemagestionclientes.dao;
 
 import com.jesielvirtual.sistemagestionclientes.models.Cliente;
+import com.mysql.jdbc.StringUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -59,6 +60,21 @@ public class ClienteDao {
         }
     }
     
+    public void actualizar(Cliente cliente) {
+        try {
+            String sql = "UPDATE `clientes` SET `nombre` = '" + cliente.getNombre() +
+                    "', `apellido` = '" + cliente.getApellido() +
+                    "', `telefono` = '" + cliente.getTelefono() +
+                    "', `correo` = '" + cliente.getCorreo() +
+                    "' WHERE `clientes`.`id` = " + cliente.getId() + ";";
+            Statement statement = conectar().createStatement();
+            statement.execute(sql);
+        // } catch (SQLException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public List<Cliente> listar() {
         List<Cliente> listado = new ArrayList<>();
 
@@ -99,6 +115,17 @@ public class ClienteDao {
         // } catch (SQLException ex) {
         } catch (Exception ex) {
             Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void guardar(Cliente cliente) {
+        // throw new UnsupportedOperationException("Not supported yet.");
+        // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        if (StringUtils.isEmptyOrWhitespaceOnly(cliente.getId())) {
+            agregar(cliente);
+        } else {
+            actualizar(cliente);
         }
     }
 }
