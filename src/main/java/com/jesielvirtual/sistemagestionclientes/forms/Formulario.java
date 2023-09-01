@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
  * @author jesielpalacios
  */
 public class Formulario extends javax.swing.JFrame {
+    
+    private List<Cliente> listListaClientes = new ArrayList<Cliente>();
 
     /**
      * Creates new form Formulario
@@ -37,7 +39,7 @@ public class Formulario extends javax.swing.JFrame {
         btnGuardar = new javax.swing.JButton();
         txtNombre = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaClientes = new javax.swing.JList<>();
+        formListaClientes = new javax.swing.JList<>();
         btnEliminar = new javax.swing.JButton();
         txtApellido = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -68,7 +70,7 @@ public class Formulario extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(listaClientes);
+        jScrollPane1.setViewportView(formListaClientes);
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -201,11 +203,12 @@ public class Formulario extends javax.swing.JFrame {
     }
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-        int indice = this.listaClientes.getSelectedIndex();
+        int indice = this.formListaClientes.getSelectedIndex();
         // listaDeClientes.remove(indice);
+        Cliente cliente = listListaClientes.get(indice);
+        ClienteDao dao = new ClienteDao();
+        dao.eliminar(cliente.getId());
         actualizarLista();
-
         JOptionPane.showMessageDialog(rootPane, "Se eliminó correctamente.");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -227,15 +230,15 @@ public class Formulario extends javax.swing.JFrame {
 
     private void actualizarLista() {
         ClienteDao dao = new ClienteDao();
-        List<Cliente> listaDeClientes = dao.listar();
+        listListaClientes = dao.listar();
         DefaultListModel datos  = new DefaultListModel();        
         
-        for (int i = 0; i < listaDeClientes.size(); i++) {
-            Cliente cliente = listaDeClientes.get(i);
+        for (int i = 0; i < listListaClientes.size(); i++) {
+            Cliente cliente = listListaClientes.get(i);
             datos.addElement(cliente.getNombreCompleto());
         }
 
-        this.listaClientes.setModel(datos);
+        this.formListaClientes.setModel(datos);
     }
     /**
      * @param args the command line arguments
@@ -275,12 +278,12 @@ public class Formulario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JList<String> formListaClientes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JList<String> listaClientes;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;

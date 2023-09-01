@@ -56,6 +56,6 @@ public class Cliente {
     }
 
     public void setId(String id) {
-        id = id;
+        this.id = id;
     }
 }

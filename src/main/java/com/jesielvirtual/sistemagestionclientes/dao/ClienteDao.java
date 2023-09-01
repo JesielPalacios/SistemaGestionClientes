@@ -20,8 +20,8 @@ import java.util.logging.Logger;
  * @author jesielpalacios
  */
 public class ClienteDao {
-
-    public void agregar(Cliente cliente) {
+    
+    public Connection conectar() {
         String baseDeDatos = "gestion_clientes";
         String usuario = "root";
         String password = "";
@@ -35,14 +35,23 @@ public class ClienteDao {
         try {
             Class.forName(driver);
             conexion = DriverManager.getConnection(conexionUrl, usuario, password);
-            
+            // } catch (SQLException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return conexion;
+    }
+
+    public void agregar(Cliente cliente) {
+        try {
             // String sql = "INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `telefono`, `correo`) VALUES ('', 'Pepito', 'Perez', '1234567890', 'asdasdasd@gmail.com');";
             String sql = "INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `telefono`, `correo`) VALUES (NULL, '" +
                     cliente.getNombre() + "', '" +
                     cliente.getApellido()+ "', '" +
                     cliente.getTelefono()+ "', '" +
                     cliente.getCorreo()+ "');";
-            Statement statement = conexion.createStatement();
+            Statement statement = conectar().createStatement();
             statement.execute(sql);
         // } catch (SQLException ex) {
         } catch (Exception ex) {
@@ -50,23 +59,13 @@ public class ClienteDao {
         }
     }
     
-        public List<Cliente> listar() {
-        String baseDeDatos = "gestion_clientes";
-        String usuario = "root";
-        String password = "";
-        String host = "localhost";
-        String puerto = "3306";
-        String driver = "com.mysql.jdbc.Driver";
-        String conexionUrl = "jdbc:mysql://" + host + ":" + puerto + "/" + baseDeDatos + "?useSSL=false";
-        
-        Connection conexion = null;
+    public List<Cliente> listar() {
         List<Cliente> listado = new ArrayList<>();
-        
-        try {
-            Class.forName(driver);
-            conexion = DriverManager.getConnection(conexionUrl, usuario, password);
 
-            String sql = "SELECT * FROM `clientes`;";
+        try {
+            Connection conexion = conectar();
+
+            String sql = "SELECT * FROM `clientes`";
             Statement statement = conexion.createStatement();
             ResultSet resultado = statement.executeQuery(sql);
             
@@ -86,5 +85,20 @@ public class ClienteDao {
         }
         
          return listado;
+    }
+        
+    public void eliminar(String id) {
+        System.out.println("id: " + id);
+        
+        try {
+            Connection conexion = conectar();
+            
+            String sql = "DELETE FROM `gestion_clientes`.`clientes` WHERE `clientes`.`id` = " + id;
+            Statement statement = conexion.createStatement();
+            statement.execute(sql);
+        // } catch (SQLException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
