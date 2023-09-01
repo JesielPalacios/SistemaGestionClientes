@@ -4,6 +4,8 @@
 
 package com.jesielvirtual.sistemagestionclientes;
 
+import com.jesielvirtual.sistemagestionclientes.forms.Formulario;
+
 /**
  *
  * @author jesielpalacios
