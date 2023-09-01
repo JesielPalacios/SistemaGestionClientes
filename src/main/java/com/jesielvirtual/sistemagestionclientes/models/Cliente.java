@@ -9,29 +9,12 @@ package com.jesielvirtual.sistemagestionclientes.models;
  * @author jesielpalacios
  */
 public class Cliente {
+    private String id;
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
-    /*
-    public String getNombre() {
-        return nombre;
-    }
-      
-    public String getApellido() {
-        return apellido;
-    }
     
-    public void setNombre(String valor) {
-        nombre = valor;
-    }
-        
-    public void setApellido(String valor) {
-        apellido = valor;
-    }
-    
-    */
-
     public String getNombreCompleto() {
         return nombre + " " + apellido;
     }
@@ -66,5 +49,13 @@ public class Cliente {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        id = id;
     }
 }

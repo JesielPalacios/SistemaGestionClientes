@@ -45,9 +45,13 @@ public class Formulario extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jLabel1.setText("Nombre");
 
@@ -97,13 +101,6 @@ public class Formulario extends javax.swing.JFrame {
 
         jLabel4.setText("Teléfono");
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,9 +128,7 @@ public class Formulario extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel4)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jButton1)
-                                                .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(18, 18, 18))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnGuardar)
@@ -170,9 +165,7 @@ public class Formulario extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(32, 32, 32))))
+                        .addGap(32, 61, Short.MAX_VALUE))))
         );
 
         pack();
@@ -182,8 +175,6 @@ public class Formulario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
-    private List<Cliente> listaDeClientes = new ArrayList<Cliente>();
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         Cliente cliente = new Cliente();
         
@@ -191,8 +182,10 @@ public class Formulario extends javax.swing.JFrame {
         cliente.setApellido(this.txtApellido.getText());
         cliente.setTelefono(this.txtTelefono.getText());
         cliente.setCorreo(this.txtCorreo.getText());
-                
-        listaDeClientes.add(cliente);
+        
+        ClienteDao dao = new ClienteDao();
+        dao.agregar(cliente);
+
         actualizarLista();
         
         JOptionPane.showMessageDialog(rootPane, "El cliente " + cliente.getNombreCompleto() + " se guardó correctamente.");
@@ -210,7 +203,7 @@ public class Formulario extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         int indice = this.listaClientes.getSelectedIndex();
-        listaDeClientes.remove(indice);
+        // listaDeClientes.remove(indice);
         actualizarLista();
 
         JOptionPane.showMessageDialog(rootPane, "Se eliminó correctamente.");
@@ -228,13 +221,13 @@ public class Formulario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        ClienteDao dao = new ClienteDao();
-        dao.conectar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        actualizarLista();
+    }//GEN-LAST:event_formComponentShown
 
     private void actualizarLista() {
+        ClienteDao dao = new ClienteDao();
+        List<Cliente> listaDeClientes = dao.listar();
         DefaultListModel datos  = new DefaultListModel();        
         
         for (int i = 0; i < listaDeClientes.size(); i++) {
@@ -282,7 +275,6 @@ public class Formulario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
